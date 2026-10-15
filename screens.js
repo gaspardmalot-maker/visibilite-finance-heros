@@ -241,6 +241,94 @@ const QUERIES = [
     ]
   },
   {
+    "id": "yomoni",
+    "label": "Avis Yomoni",
+    "screens": [
+      {
+        "source": "google",
+        "query": "avis yomoni",
+        "tag": "IA + source #1",
+        "image": "images/yomoni-1-google.png",
+        "highlights": [
+          {
+            "label": "Cité par l'IA",
+            "top": 26.23,
+            "height": 2.61,
+            "left": 25.96,
+            "width": 10.48
+          },
+          {
+            "label": "Source de l'IA",
+            "top": 23.86,
+            "height": 9.32,
+            "left": 69.63,
+            "width": 28.54
+          }
+        ]
+      },
+      {
+        "source": "google-news",
+        "query": "yomoni",
+        "tag": "#1",
+        "image": "images/yomoni-2-google-news.png",
+        "highlights": [
+          {
+            "label": "#1 Actualités",
+            "top": 13.4,
+            "height": 11.32,
+            "left": 22.0,
+            "width": 53.17
+          }
+        ]
+      },
+      {
+        "source": "chatgpt",
+        "query": "quel est ton avis sur Yomoni ?",
+        "tag": "Lien recommandé",
+        "image": "images/yomoni-3-chatgpt.png",
+        "highlights": [
+          {
+            "label": "Lien recommandé",
+            "top": 92.02,
+            "height": 2.52,
+            "left": 18.81,
+            "width": 62.38
+          }
+        ]
+      },
+      {
+        "source": "claude",
+        "query": "quel est ton avis sur yomoni ?",
+        "tag": "Source citée",
+        "image": "images/yomoni-4-claude.png",
+        "highlights": [
+          {
+            "label": "Source citée",
+            "top": 94.6,
+            "height": 2.26,
+            "left": 19.1,
+            "width": 8.33
+          }
+        ]
+      },
+      {
+        "source": "youtube",
+        "query": "yomoni",
+        "tag": "#1",
+        "image": "images/yomoni-5-youtube.png",
+        "highlights": [
+          {
+            "label": "#1 vidéo",
+            "top": 39.12,
+            "height": 25.72,
+            "left": 0.33,
+            "width": 98.53
+          }
+        ]
+      }
+    ]
+  },
+  {
     "id": "bourse-direct",
     "label": "Avis Bourse Direct",
     "screens": [

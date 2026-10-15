@@ -210,7 +210,7 @@
       <p class="eyebrow" id="eyebrow"></p>
       <h1 id="title"></h1>
     </div>
-    <div class="counter"><b id="idx">1</b> / <span id="total"></span></div>
+    <div class="counter"><span id="qname"></span> · screen <b id="idx">1</b> / <b id="total"></b></div>
   </header>
 
   <nav class="queries" id="queries" role="tablist" aria-label="Requêtes"></nav>
@@ -260,6 +260,7 @@ const SOURCES = {
   "google-ai":   { name: "Google Mode IA",    url: (q) => `<b>google.fr</b>/search?udm=50&q=${q}` },
   "youtube":     { name: "YouTube",           url: (q) => `<b>youtube.com</b>/results?search_query=${q}` },
   "chatgpt":     { name: "ChatGPT",           url: () => `<b>chatgpt.com</b>` },
+  "claude":      { name: "Claude",            url: () => `<b>claude.ai</b>` },
 };
 
 /* ========================================================= */
@@ -303,6 +304,7 @@ function selectQuery(k, keepHash) {
     $("dots").appendChild(d);
   });
   $("total").textContent = screens().length;
+  $("qname").textContent = QUERIES[q].label;
   show(0);
 }
 
