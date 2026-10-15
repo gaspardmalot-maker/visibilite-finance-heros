@@ -59,16 +59,15 @@
   .counter b { color: var(--ink); font-weight: 600; }
 
   /* ---------- Menu des requêtes ---------- */
-  .queries { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 14px; scrollbar-width: none; }
-  .queries::-webkit-scrollbar { display: none; }
+  .queries { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 8px; padding: 2px 2px 14px; }
   .query {
-    flex: 1 0 auto; min-width: 150px; text-align: left; cursor: pointer; font: inherit; color: var(--ink);
-    background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 14px 11px;
+    min-width: 0; text-align: left; cursor: pointer; font: inherit; color: var(--ink);
+    background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 9px 12px 10px;
     transition: border-color .2s, background .2s, transform .2s, box-shadow .2s;
   }
   .query:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
   .query small { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
-  .query b { font-size: 15.5px; font-weight: 700; }
+  .query b { display: block; font-size: 15px; font-weight: 700; line-height: 1.2; }
   .query[aria-selected="true"] {
     border-color: var(--accent); background: var(--accent-soft);
     box-shadow: inset 0 -3px 0 var(--accent);
