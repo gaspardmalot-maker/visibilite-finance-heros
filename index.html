@@ -58,7 +58,24 @@
   .counter { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .counter b { color: var(--ink); font-weight: 600; }
 
-  /* ---------- Onglets requêtes ---------- */
+  /* ---------- Menu des requêtes ---------- */
+  .queries { display: flex; gap: 10px; overflow-x: auto; padding: 2px 2px 14px; scrollbar-width: none; }
+  .queries::-webkit-scrollbar { display: none; }
+  .query {
+    flex: 1 0 auto; min-width: 150px; text-align: left; cursor: pointer; font: inherit; color: var(--ink);
+    background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 14px 11px;
+    transition: border-color .2s, background .2s, transform .2s, box-shadow .2s;
+  }
+  .query:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
+  .query small { display: block; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+  .query b { font-size: 15.5px; font-weight: 700; }
+  .query[aria-selected="true"] {
+    border-color: var(--accent); background: var(--accent-soft);
+    box-shadow: inset 0 -3px 0 var(--accent);
+  }
+  .query[aria-selected="true"] small { color: var(--accent-ink); }
+
+  /* ---------- Onglets supports ---------- */
   .pills { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 14px; scrollbar-width: none; }
   .pills::-webkit-scrollbar { display: none; }
   .pill {
@@ -115,7 +132,7 @@
 
   .stage { position: relative; background: #fff; }
   .viewport {
-    height: clamp(360px, calc(100vh - 230px), 760px);
+    height: clamp(340px, calc(100vh - 300px), 760px);
     overflow-y: auto; overscroll-behavior: contain; scroll-behavior: auto;
   }
   .viewport::-webkit-scrollbar { width: 10px; }
@@ -184,32 +201,6 @@
     .hint { display: none; }
   }
 
-  /* ---------- Page Google factice (affichée tant qu'il n'y a pas d'image) ---------- */
-  .serp { font-family: Arial, sans-serif; color: #202124; padding: 22px 0 40px; }
-  .serp-top { display: flex; align-items: center; gap: 22px; padding: 0 24px 16px; }
-  .glogo { font-family: "Product Sans", Arial, sans-serif; font-size: 26px; font-weight: 500; letter-spacing: -1px; }
-  .glogo span:nth-child(1), .glogo span:nth-child(4) { color: #4285f4; }
-  .glogo span:nth-child(2), .glogo span:nth-child(6) { color: #ea4335; }
-  .glogo span:nth-child(3) { color: #fbbc05; }
-  .glogo span:nth-child(5) { color: #34a853; }
-  .gbox { flex: 1; max-width: 560px; border: 1px solid #dfe1e5; border-radius: 24px; padding: 10px 18px; font-size: 15px; box-shadow: 0 1px 6px rgba(32,33,36,.18); }
-  .gtabs { display: flex; gap: 22px; padding: 0 24px 0 120px; font-size: 13.5px; color: #5f6368; border-bottom: 1px solid #ebebeb; }
-  .gtabs span { padding-bottom: 10px; }
-  .gtabs span:first-child { color: #1a0dab; border-bottom: 3px solid #1a0dab; }
-  .results { padding: 18px 24px 0 120px; max-width: 760px; }
-  .res { position: relative; padding: 14px 0; margin-bottom: 14px; }
-  .res .site { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
-  .fav { width: 26px; height: 26px; border-radius: 50%; background: #f1f3f4; border: 1px solid #e3e3e3; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; }
-  .bar { height: 9px; border-radius: 5px; background: #eceff1; }
-  .tbar { height: 14px; border-radius: 6px; background: #c9d4f7; margin: 6px 0 10px; }
-  .res .name { font-size: 14px; }
-  .res .url { font-size: 12px; color: #4d5156; }
-  .res h3 { font-size: 20px; font-weight: 400; color: #1a0dab; margin: 2px 0 6px; line-height: 1.3; }
-  .res p { font-size: 14px; color: #4d5156; line-height: 1.58; }
-  .paa { border: 1px solid #ebebeb; border-radius: 12px; padding: 14px 16px; margin-bottom: 26px; }
-  .paa h4 { font-size: 18px; font-weight: 400; margin-bottom: 10px; }
-  .paa div { border-top: 1px solid #ebebeb; padding: 14px 0; }
-  @media (max-width: 680px) { .gtabs, .results { padding-left: 24px; } }
 </style>
 </head>
 <body>
@@ -222,7 +213,8 @@
     <div class="counter"><b id="idx">1</b> / <span id="total"></span></div>
   </header>
 
-  <nav class="pills" id="pills" role="tablist" aria-label="Requêtes Google"></nav>
+  <nav class="queries" id="queries" role="tablist" aria-label="Requêtes"></nav>
+  <nav class="pills" id="pills" role="tablist" aria-label="Supports"></nav>
 
   <section class="browser">
     <div class="chrome">
@@ -232,8 +224,8 @@
         <span id="url"></span>
       </div>
       <div class="navbtns">
-        <button id="prev" aria-label="Requête précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
-        <button id="next" aria-label="Requête suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6"/></svg></button>
+        <button id="prev" aria-label="Screen précédent"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button id="next" aria-label="Screen suivant"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6"/></svg></button>
       </div>
     </div>
     <div class="progress"><span id="bar"></span></div>
@@ -242,7 +234,7 @@
       <div class="fade" id="fade"></div>
       <div class="hint" id="hint"><span class="mouse"></span>Faites défiler</div>
       <button class="jump" id="jump">
-        Voir Finance Héros
+        <span id="jumpLabel">Voir Finance Héros</span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
       </button>
     </div>
@@ -251,127 +243,81 @@
   <div class="foot" id="dots"></div>
 </main>
 
+<script src="screens.js"></script>
 <script>
 /* =========================================================
-   CONFIGURATION — c'est la seule partie à modifier
-   ---------------------------------------------------------
-   image     : chemin du screen (ex. "images/1.png"). Laisse ""
-               pour afficher une page Google factice de démo.
-   highlight : position de TON résultat dans le screen, en %
-               de la hauteur de l'image (top = début du bloc,
-               height = hauteur du bloc). Mets null pour aucun encadré.
+   Les screens et encadrés sont générés dans screens.js
+   (script preparer-screens.py). Ici : textes et sources.
    ========================================================= */
 const CONFIG = {
   eyebrow: "Visibilité Finance Héros",
   title: "Là où nos lecteurs nous trouvent",
-  brand: "Finance Héros",
-  domain: "finance-heros.fr",
-  screens: [
-    { source: "chatgpt", query: "Quelle est la meilleure assurance vie du moment ?", tag: "Source citée",
-      image: "images/1-chatgpt.png",
-      highlights: [{ label: "Source citée", top: 91.6, height: 5.2, left: 15.4, width: 67.9 }] },
-    { source: "google-news", query: "meilleur assurance vie", tag: "#1",
-      image: "images/2-google-actualites.png",
-      highlights: [{ label: "#1 Actualités", top: 15.3, height: 14.3, left: 14.6, width: 67.5 }] },
-    { source: "google", query: "meilleure assurance vie", tag: "IA + #2",
-      image: "images/3-google.png",
-      highlights: [{ label: "Cité par l'IA", top: 24.4, height: 2.6, left: 45.1, width: 10.7 },
-                   { label: "#2 organique", top: 78.1, height: 11.8, left: 11, width: 54.8 }] },
-    { source: "youtube", query: "meilleure assurance vie", tag: "#1",
-      image: "images/4-youtube.png",
-      highlights: [{ label: "#1 vidéo", top: 41.8, height: 26.5, left: 0.5, width: 99 }] },
-    { source: "google", query: "requête 5 (à venir)", tag: "#1", position: 1, image: "", highlights: [] },
-    { source: "google", query: "requête 6 (à venir)", tag: "#1", position: 1, image: "", highlights: [] },
-  ],
 };
 
 const SOURCES = {
-  "google":      { name: "Google",             url: (q) => `<b>google.fr</b>/search?q=${q}` },
-  "google-news": { name: "Google Actualités",  url: (q) => `<b>google.fr</b>/search?q=${q}&tbm=nws` },
-  "youtube":     { name: "YouTube",            url: (q) => `<b>youtube.com</b>/results?search_query=${q}` },
-  "chatgpt":     { name: "ChatGPT",            url: () => `<b>chatgpt.com</b>` },
+  "google":      { name: "Google",            url: (q) => `<b>google.fr</b>/search?q=${q}` },
+  "google-news": { name: "Google Actualités", url: (q) => `<b>google.fr</b>/search?q=${q}&tbm=nws` },
+  "google-ai":   { name: "Google Mode IA",    url: (q) => `<b>google.fr</b>/search?udm=50&q=${q}` },
+  "youtube":     { name: "YouTube",           url: (q) => `<b>youtube.com</b>/results?search_query=${q}` },
+  "chatgpt":     { name: "ChatGPT",           url: () => `<b>chatgpt.com</b>` },
 };
 
 /* ========================================================= */
 const $ = (id) => document.getElementById(id);
 const vp = $("vp"), page = $("page");
-let current = 0, hintDismissed = false, scrolling = null;
+let q = 0, current = 0, jumpIdx = 0, hintDismissed = false, scrolling = null;
+const screens = () => QUERIES[q].screens;
 
 $("eyebrow").textContent = CONFIG.eyebrow;
 $("title").textContent = CONFIG.title;
-$("total").textContent = CONFIG.screens.length;
 
 const searchIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
-CONFIG.screens.forEach((s, i) => {
+QUERIES.forEach((query, k) => {
   const b = document.createElement("button");
-  b.className = "pill"; b.setAttribute("role", "tab");
-  b.innerHTML = `${searchIcon}<span><span class="src">${SOURCES[s.source].name}</span> · ${esc(s.query)}</span><span class="rank">${esc(s.tag)}</span>`;
-  b.onclick = () => show(i);
-  $("pills").appendChild(b);
-
-  const d = document.createElement("button");
-  d.setAttribute("aria-label", `Requête ${i + 1}`);
-  d.onclick = () => show(i);
-  $("dots").appendChild(d);
-
-  if (s.image) { const im = new Image(); im.src = s.image; } // préchargement
+  b.className = "query"; b.setAttribute("role", "tab");
+  b.innerHTML = `<small>${query.screens.length} supports</small><b>${esc(query.label)}</b>`;
+  b.onclick = () => selectQuery(k);
+  $("queries").appendChild(b);
+  query.screens.forEach((s) => { const im = new Image(); im.src = s.image; }); // préchargement
 });
 
-function fakeSerp(s) {
-  const generic = () => `
-    <div class="res">
-      <div class="site"><div class="fav"></div><div style="flex:1"><div class="bar" style="width:120px;margin-bottom:6px"></div><div class="bar" style="width:200px;height:7px"></div></div></div>
-      <div class="tbar" style="width:${55 + Math.random() * 35}%"></div>
-      <div class="bar" style="width:96%;margin-bottom:7px"></div><div class="bar" style="width:${60 + Math.random() * 30}%"></div>
-    </div>`;
-  const ours = `
-    <div class="res" data-ours>
-      <div class="site"><div class="fav" style="background:var(--accent);border:0">${esc(CONFIG.brand[0])}</div>
-        <div><div class="name">${esc(CONFIG.brand)}</div><div class="url">https://${esc(CONFIG.domain)} › guides</div></div></div>
-      <h3>${esc(s.query.charAt(0).toUpperCase() + s.query.slice(1))} : le guide complet | ${esc(CONFIG.brand)}</h3>
-      <p>Tout ce qu'il faut savoir pour bien choisir, comparer et passer à l'action — expliqué simplement, avec des exemples concrets et un simulateur gratuit.</p>
-    </div>`;
-  let list = "";
-  for (let r = 1; r <= 10; r++) {
-    list += r === s.position ? ours : generic();
-    if (r === 4) list += `<div class="paa"><h4>Autres questions posées</h4>${'<div><div class="bar" style="width:70%"></div></div>'.repeat(4)}</div>`;
-  }
-  const logo = "Google".split("").map((c) => `<span>${c}</span>`).join("");
-  return `<div class="serp">
-    <div class="serp-top"><div class="glogo">${logo}</div><div class="gbox">${esc(s.query)}</div></div>
-    <div class="gtabs"><span>Tous</span><span>Images</span><span>Actualités</span><span>Vidéos</span><span>Shopping</span></div>
-    <div class="results">${list}</div></div>`;
+function selectQuery(k, keepHash) {
+  q = k;
+  [...$("queries").children].forEach((b, i) => {
+    b.setAttribute("aria-selected", i === q);
+    if (i === q) b.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+  });
+  if (!keepHash) history.replaceState(null, "", "#" + QUERIES[q].id);
+  $("pills").innerHTML = ""; $("dots").innerHTML = "";
+  screens().forEach((s, i) => {
+    const b = document.createElement("button");
+    b.className = "pill"; b.setAttribute("role", "tab");
+    b.innerHTML = `${searchIcon}<span class="src">${SOURCES[s.source].name}</span><span class="rank">${esc(s.tag)}</span>`;
+    b.onclick = () => show(i);
+    $("pills").appendChild(b);
+    const d = document.createElement("button");
+    d.setAttribute("aria-label", `Screen ${i + 1}`);
+    d.onclick = () => show(i);
+    $("dots").appendChild(d);
+  });
+  $("total").textContent = screens().length;
+  show(0);
 }
 
 function render(s) {
-  const label = s.tag;
-  if (s.image) {
-    const rings = (s.highlights || []).map((h) =>
-      `<div class="ring${h.height < 4 ? " small" : ""}" data-label="${esc(h.label)}" style="top:${h.top}%;height:${h.height}%;left:${h.left}%;width:${h.width}%;right:auto"></div>`).join("");
-    page.innerHTML = `<img src="${esc(s.image)}" alt="Résultats ${SOURCES[s.source].name} pour « ${esc(s.query)} »">${rings}`;
-  } else {
-    page.innerHTML = fakeSerp(s);
-    const el = page.querySelector("[data-ours]");
-    if (el) {
-      const ring = document.createElement("div");
-      ring.className = "ring"; ring.dataset.label = label;
-      ring.style.top = (el.offsetTop - 8) + "px";
-      ring.style.height = (el.offsetHeight + 16) + "px";
-      ring.style.left = "100px"; ring.style.right = "auto";
-      ring.style.width = Math.min(el.offsetWidth + 40, page.clientWidth - 110) + "px";
-      if (page.clientWidth < 680) { ring.style.left = "12px"; ring.style.width = (page.clientWidth - 24) + "px"; }
-      page.appendChild(ring);
-    }
-  }
-  $("jump").style.display = page.querySelector(".ring") ? "" : "none";
+  const rings = s.highlights.map((h) =>
+    `<div class="ring${h.height < 4 ? " small" : ""}" data-label="${esc(h.label)}" style="top:${h.top}%;height:${h.height}%;left:${h.left}%;width:${h.width}%;right:auto"></div>`).join("");
+  page.innerHTML = `<img src="${esc(s.image)}" alt="Résultats ${SOURCES[s.source].name} pour « ${esc(s.query)} »">${rings}`;
+  $("jump").style.display = s.highlights.length ? "" : "none";
 }
 
 function show(i) {
-  const n = CONFIG.screens.length;
+  const n = screens().length;
   current = (i + n) % n;
-  const s = CONFIG.screens[current];
+  jumpIdx = 0;
+  const s = screens()[current];
   [...$("pills").children].forEach((p, k) => {
     p.setAttribute("aria-selected", k === current);
     if (k === current) p.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
@@ -379,6 +325,7 @@ function show(i) {
   [...$("dots").children].forEach((d, k) => d.setAttribute("aria-current", k === current));
   $("idx").textContent = current + 1;
   $("url").innerHTML = SOURCES[s.source].url(esc(encodeURIComponent(s.query).replace(/%20/g, "+")));
+  updateJump();
 
   page.classList.add("out");
   setTimeout(() => {
@@ -390,6 +337,12 @@ function show(i) {
     const img = page.querySelector("img");
     if (img && !img.complete) img.onload = onScroll;
   }, 220);
+}
+
+// Le bouton passe d'une mention à la suivante quand il y en a plusieurs
+function updateJump() {
+  const n = screens()[current].highlights.length;
+  $("jumpLabel").textContent = n > 1 ? `Voir Finance Héros (${jumpIdx + 1}/${n})` : "Voir Finance Héros";
 }
 
 function animateTo(target, duration = 1300) {
@@ -408,11 +361,14 @@ function animateTo(target, duration = 1300) {
 
 $("jump").onclick = async () => {
   hintDismissed = true; onScroll();
-  const ring = page.querySelector(".ring");
-  if (!ring) return;
-  page.querySelectorAll(".ring").forEach((r) => { r.classList.remove("flash"); void r.offsetWidth; r.classList.add("flash"); });
+  const rings = [...page.querySelectorAll(".ring")].sort((a, b) => a.offsetTop - b.offsetTop);
+  if (!rings.length) return;
+  const ring = rings[jumpIdx % rings.length];
+  jumpIdx = (jumpIdx + 1) % rings.length;
+  updateJump();
   const target = Math.max(0, ring.offsetTop - vp.clientHeight * 0.28);
   await animateTo(Math.min(target, vp.scrollHeight - vp.clientHeight));
+  ring.classList.remove("flash"); void ring.offsetWidth; ring.classList.add("flash");
 };
 
 function onScroll() {
@@ -432,7 +388,8 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") show(current - 1);
 });
 
-show(0);
+const fromHash = QUERIES.findIndex((x) => "#" + x.id === location.hash);
+selectQuery(Math.max(0, fromHash), fromHash < 0);
 </script>
 </body>
 </html>
