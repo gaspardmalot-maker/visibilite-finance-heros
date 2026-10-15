@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visibilité Finance Héros</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Text&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* =========================================================
+     COULEURS — modifie --accent pour coller à ta marque
+     ========================================================= */
+  :root {
+    /* Palette Finance Héros (thème finance-heros.fr) */
+    --accent: #0a8282;
+    --accent-ink: #0a8282;
+    --accent-soft: rgba(10, 130, 130, .10);
+    --sand: #f2d9a9;
+    --orange: #f56f29;
+    --bg: #ffffff;
+    --ink: #171c1c;
+    --muted: #535858;
+    --line: #e9eeee;
+    --chrome: #f7fcfc;
+    --pill: #f7fcfc;
+    --shadow: 0 24px 60px -20px rgba(10, 50, 50, .30), 0 2px 6px rgba(10, 50, 50, .06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --accent-ink: #0fc8c8;
+      --accent-soft: rgba(15, 200, 200, .14);
+      --bg: #191919; --ink: #edf2f2; --muted: #9aa3a3; --line: #2b3030;
+      --chrome: #222727; --pill: #222727;
+      --shadow: 0 24px 60px -20px rgba(0, 0, 0, .7), 0 2px 6px rgba(0, 0, 0, .3);
+    }
+  }
+  :root[data-theme="dark"] {
+    --accent-ink: #0fc8c8; --accent-soft: rgba(15, 200, 200, .14);
+    --bg: #191919; --ink: #edf2f2; --muted: #9aa3a3; --line: #2b3030;
+    --chrome: #222727; --pill: #222727;
+    --shadow: 0 24px 60px -20px rgba(0, 0, 0, .7), 0 2px 6px rgba(0, 0, 0, .3);
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html, body { background: var(--bg); color: var(--ink); }
+  body {
+    font-family: "Source Sans 3", "Source Sans Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 20px 16px 28px;
+  }
+  .wrap { max-width: 980px; margin: 0 auto; }
+
+  /* ---------- En-tête ---------- */
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+  .eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--orange); margin-bottom: 4px; }
+  h1 { font-family: "DM Serif Text", Georgia, serif; font-size: clamp(22px, 3.6vw, 30px); font-weight: 400; letter-spacing: -.005em; }
+  .counter { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .counter b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Onglets requêtes ---------- */
+  .pills { display: flex; gap: 8px; overflow-x: auto; padding: 2px 2px 14px; scrollbar-width: none; }
+  .pills::-webkit-scrollbar { display: none; }
+  .pill {
+    flex: 0 0 auto; display: inline-flex; align-items: center; gap: 8px;
+    font: inherit; font-size: 13.5px; font-weight: 500; color: var(--ink);
+    background: var(--pill); border: 1px solid var(--line); border-radius: 999px;
+    padding: 7px 8px 7px 12px; cursor: pointer;
+    transition: background .2s, border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .pill:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); }
+  .pill .src { font-weight: 600; }
+  .pill svg { width: 14px; height: 14px; opacity: .55; flex: none; }
+  .pill .rank {
+    font-size: 11.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px;
+    background: var(--accent-soft); color: var(--accent-ink);
+  }
+  .pill[aria-selected="true"] {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+    box-shadow: 0 6px 18px -6px color-mix(in srgb, var(--accent) 70%, transparent);
+  }
+  .pill[aria-selected="true"] svg { opacity: .85; }
+  .pill[aria-selected="true"] .rank { background: rgba(255,255,255,.22); color: #fff; }
+
+  /* ---------- Fenêtre navigateur ---------- */
+  .browser {
+    border-radius: 14px; overflow: hidden; background: var(--chrome);
+    border: 1px solid var(--line); box-shadow: var(--shadow);
+  }
+  .chrome { display: flex; align-items: center; gap: 12px; padding: 10px 12px; }
+  .dots { display: flex; gap: 7px; flex: none; }
+  .dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .dots i:nth-child(1) { background: #ff5f57; }
+  .dots i:nth-child(2) { background: #febc2e; }
+  .dots i:nth-child(3) { background: #28c840; }
+  .addr {
+    flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;
+    background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 6px 10px; font-size: 12.5px; color: var(--muted);
+  }
+  .addr svg { width: 12px; height: 12px; flex: none; }
+  .addr span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .addr b { color: var(--ink); font-weight: 500; }
+  .navbtns { display: flex; gap: 4px; flex: none; }
+  .navbtns button {
+    width: 30px; height: 30px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--ink); cursor: pointer; display: grid; place-items: center;
+    transition: background .2s;
+  }
+  .navbtns button:hover { background: var(--pill); }
+  .navbtns svg { width: 14px; height: 14px; }
+
+  .progress { height: 3px; background: var(--line); }
+  .progress span { display: block; height: 100%; width: 0; background: var(--accent); transition: width .08s linear; }
+
+  .stage { position: relative; background: #fff; }
+  .viewport {
+    height: clamp(360px, calc(100vh - 230px), 760px);
+    overflow-y: auto; overscroll-behavior: contain; scroll-behavior: auto;
+  }
+  .viewport::-webkit-scrollbar { width: 10px; }
+  .viewport::-webkit-scrollbar-thumb { background: rgba(0,0,0,.18); border-radius: 10px; border: 3px solid #fff; }
+  .viewport::after { content: ""; display: block; height: 120px; }
+  .page { position: relative; transition: opacity .28s ease, transform .28s ease; }
+  .page.out { opacity: 0; transform: translateY(8px); }
+  .page img { display: block; width: 100%; height: auto; }
+
+  /* Encadré sur ton résultat */
+  .ring {
+    position: absolute; left: 1.5%; right: 1.5%; pointer-events: none;
+    border: 2.5px solid var(--accent); border-radius: 12px;
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent);
+  }
+  .ring::after {
+    content: attr(data-label); position: absolute; top: -13px; right: 14px;
+    background: var(--sand); color: #0a3232; font-size: 12.5px; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px; letter-spacing: .01em; white-space: nowrap;
+    box-shadow: 0 4px 12px -4px rgba(10, 50, 50, .45); border: 1.5px solid var(--accent);
+  }
+  .ring.small::after { top: -34px; right: 50%; transform: translateX(50%); }
+  .ring.flash { animation: flash 1.4s ease-out 2; }
+  @keyframes flash {
+    0% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent); }
+    40% { box-shadow: 0 0 0 16px color-mix(in srgb, var(--accent) 0%, transparent), 0 0 0 6px color-mix(in srgb, var(--accent) 30%, transparent); }
+    100% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent); }
+  }
+
+  .fade { position: absolute; left: 0; right: 0; bottom: 0; height: 90px; pointer-events: none;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,.95)); transition: opacity .3s; }
+  .fade.hide { opacity: 0; }
+
+  .hint {
+    position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 8px; pointer-events: none;
+    font-size: 12.5px; font-weight: 500; color: #3c4043;
+    background: rgba(255,255,255,.92); border: 1px solid #e3e3e3; border-radius: 999px; padding: 6px 12px 6px 8px;
+    box-shadow: 0 6px 18px -8px rgba(0,0,0,.3); transition: opacity .35s;
+  }
+  .hint.hide { opacity: 0; }
+  .mouse { width: 16px; height: 24px; border: 1.8px solid #5f6368; border-radius: 9px; position: relative; }
+  .mouse::after { content: ""; position: absolute; left: 50%; top: 4px; width: 3px; height: 6px; margin-left: -1.5px; border-radius: 2px; background: #5f6368; animation: wheel 1.6s ease-in-out infinite; }
+  @keyframes wheel { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(8px); } }
+
+  .jump {
+    position: absolute; right: 16px; bottom: 16px; z-index: 2;
+    font: inherit; font-size: 13px; font-weight: 600; color: #fff; cursor: pointer;
+    background: var(--accent); border: 0; border-radius: 999px; padding: 10px 16px;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 10px 24px -8px color-mix(in srgb, var(--accent) 75%, transparent);
+    transition: transform .2s, opacity .3s;
+  }
+  .jump:hover { transform: translateY(-2px); }
+  .jump svg { width: 14px; height: 14px; }
+
+  .foot { display: flex; justify-content: center; gap: 6px; margin-top: 16px; }
+  .foot button { width: 7px; height: 7px; padding: 0; border-radius: 99px; border: 0; background: var(--line); cursor: pointer; transition: width .3s, background .3s; }
+  .foot button[aria-current="true"] { width: 22px; background: var(--accent); }
+
+  @media (max-width: 560px) {
+    .head { align-items: flex-start; flex-direction: column; gap: 4px; }
+    .navbtns { display: none; }
+    .jump { right: 50%; transform: translateX(50%); bottom: 14px; }
+    .jump:hover { transform: translateX(50%); }
+    .hint { display: none; }
+  }
+
+  /* ---------- Page Google factice (affichée tant qu'il n'y a pas d'image) ---------- */
+  .serp { font-family: Arial, sans-serif; color: #202124; padding: 22px 0 40px; }
+  .serp-top { display: flex; align-items: center; gap: 22px; padding: 0 24px 16px; }
+  .glogo { font-family: "Product Sans", Arial, sans-serif; font-size: 26px; font-weight: 500; letter-spacing: -1px; }
+  .glogo span:nth-child(1), .glogo span:nth-child(4) { color: #4285f4; }
+  .glogo span:nth-child(2), .glogo span:nth-child(6) { color: #ea4335; }
+  .glogo span:nth-child(3) { color: #fbbc05; }
+  .glogo span:nth-child(5) { color: #34a853; }
+  .gbox { flex: 1; max-width: 560px; border: 1px solid #dfe1e5; border-radius: 24px; padding: 10px 18px; font-size: 15px; box-shadow: 0 1px 6px rgba(32,33,36,.18); }
+  .gtabs { display: flex; gap: 22px; padding: 0 24px 0 120px; font-size: 13.5px; color: #5f6368; border-bottom: 1px solid #ebebeb; }
+  .gtabs span { padding-bottom: 10px; }
+  .gtabs span:first-child { color: #1a0dab; border-bottom: 3px solid #1a0dab; }
+  .results { padding: 18px 24px 0 120px; max-width: 760px; }
+  .res { position: relative; padding: 14px 0; margin-bottom: 14px; }
+  .res .site { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .fav { width: 26px; height: 26px; border-radius: 50%; background: #f1f3f4; border: 1px solid #e3e3e3; flex: none; display: grid; place-items: center; font-size: 12px; font-weight: 700; color: #fff; }
+  .bar { height: 9px; border-radius: 5px; background: #eceff1; }
+  .tbar { height: 14px; border-radius: 6px; background: #c9d4f7; margin: 6px 0 10px; }
+  .res .name { font-size: 14px; }
+  .res .url { font-size: 12px; color: #4d5156; }
+  .res h3 { font-size: 20px; font-weight: 400; color: #1a0dab; margin: 2px 0 6px; line-height: 1.3; }
+  .res p { font-size: 14px; color: #4d5156; line-height: 1.58; }
+  .paa { border: 1px solid #ebebeb; border-radius: 12px; padding: 14px 16px; margin-bottom: 26px; }
+  .paa h4 { font-size: 18px; font-weight: 400; margin-bottom: 10px; }
+  .paa div { border-top: 1px solid #ebebeb; padding: 14px 0; }
+  @media (max-width: 680px) { .gtabs, .results { padding-left: 24px; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="head">
+    <div>
+      <p class="eyebrow" id="eyebrow"></p>
+      <h1 id="title"></h1>
+    </div>
+    <div class="counter"><b id="idx">1</b> / <span id="total"></span></div>
+  </header>
+
+  <nav class="pills" id="pills" role="tablist" aria-label="Requêtes Google"></nav>
+
+  <section class="browser">
+    <div class="chrome">
+      <div class="dots"><i></i><i></i><i></i></div>
+      <div class="addr">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+        <span id="url"></span>
+      </div>
+      <div class="navbtns">
+        <button id="prev" aria-label="Requête précédente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M15 18l-6-6 6-6"/></svg></button>
+        <button id="next" aria-label="Requête suivante"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6"/></svg></button>
+      </div>
+    </div>
+    <div class="progress"><span id="bar"></span></div>
+    <div class="stage">
+      <div class="viewport" id="vp"><div class="page" id="page"></div></div>
+      <div class="fade" id="fade"></div>
+      <div class="hint" id="hint"><span class="mouse"></span>Faites défiler</div>
+      <button class="jump" id="jump">
+        Voir Finance Héros
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <div class="foot" id="dots"></div>
+</main>
+
+<script>
+/* =========================================================
+   CONFIGURATION — c'est la seule partie à modifier
+   ---------------------------------------------------------
+   image     : chemin du screen (ex. "images/1.png"). Laisse ""
+               pour afficher une page Google factice de démo.
+   highlight : position de TON résultat dans le screen, en %
+               de la hauteur de l'image (top = début du bloc,
+               height = hauteur du bloc). Mets null pour aucun encadré.
+   ========================================================= */
+const CONFIG = {
+  eyebrow: "Visibilité Finance Héros",
+  title: "Là où nos lecteurs nous trouvent",
+  brand: "Finance Héros",
+  domain: "finance-heros.fr",
+  screens: [
+    { source: "chatgpt", query: "Quelle est la meilleure assurance vie du moment ?", tag: "Source citée",
+      image: "images/1-chatgpt.png",
+      highlights: [{ label: "Source citée", top: 91.6, height: 5.2, left: 15.4, width: 67.9 }] },
+    { source: "google-news", query: "meilleur assurance vie", tag: "#1",
+      image: "images/2-google-actualites.png",
+      highlights: [{ label: "#1 Actualités", top: 15.3, height: 14.3, left: 14.6, width: 67.5 }] },
+    { source: "google", query: "meilleure assurance vie", tag: "IA + #2",
+      image: "images/3-google.png",
+      highlights: [{ label: "Cité par l'IA", top: 24.4, height: 2.6, left: 45.1, width: 10.7 },
+                   { label: "#2 organique", top: 78.1, height: 11.8, left: 11, width: 54.8 }] },
+    { source: "youtube", query: "meilleure assurance vie", tag: "#1",
+      image: "images/4-youtube.png",
+      highlights: [{ label: "#1 vidéo", top: 41.8, height: 26.5, left: 0.5, width: 99 }] },
+    { source: "google", query: "requête 5 (à venir)", tag: "#1", position: 1, image: "", highlights: [] },
+    { source: "google", query: "requête 6 (à venir)", tag: "#1", position: 1, image: "", highlights: [] },
+  ],
+};
+
+const SOURCES = {
+  "google":      { name: "Google",             url: (q) => `<b>google.fr</b>/search?q=${q}` },
+  "google-news": { name: "Google Actualités",  url: (q) => `<b>google.fr</b>/search?q=${q}&tbm=nws` },
+  "youtube":     { name: "YouTube",            url: (q) => `<b>youtube.com</b>/results?search_query=${q}` },
+  "chatgpt":     { name: "ChatGPT",            url: () => `<b>chatgpt.com</b>` },
+};
+
+/* ========================================================= */
+const $ = (id) => document.getElementById(id);
+const vp = $("vp"), page = $("page");
+let current = 0, hintDismissed = false, scrolling = null;
+
+$("eyebrow").textContent = CONFIG.eyebrow;
+$("title").textContent = CONFIG.title;
+$("total").textContent = CONFIG.screens.length;
+
+const searchIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+CONFIG.screens.forEach((s, i) => {
+  const b = document.createElement("button");
+  b.className = "pill"; b.setAttribute("role", "tab");
+  b.innerHTML = `${searchIcon}<span><span class="src">${SOURCES[s.source].name}</span> · ${esc(s.query)}</span><span class="rank">${esc(s.tag)}</span>`;
+  b.onclick = () => show(i);
+  $("pills").appendChild(b);
+
+  const d = document.createElement("button");
+  d.setAttribute("aria-label", `Requête ${i + 1}`);
+  d.onclick = () => show(i);
+  $("dots").appendChild(d);
+
+  if (s.image) { const im = new Image(); im.src = s.image; } // préchargement
+});
+
+function fakeSerp(s) {
+  const generic = () => `
+    <div class="res">
+      <div class="site"><div class="fav"></div><div style="flex:1"><div class="bar" style="width:120px;margin-bottom:6px"></div><div class="bar" style="width:200px;height:7px"></div></div></div>
+      <div class="tbar" style="width:${55 + Math.random() * 35}%"></div>
+      <div class="bar" style="width:96%;margin-bottom:7px"></div><div class="bar" style="width:${60 + Math.random() * 30}%"></div>
+    </div>`;
+  const ours = `
+    <div class="res" data-ours>
+      <div class="site"><div class="fav" style="background:var(--accent);border:0">${esc(CONFIG.brand[0])}</div>
+        <div><div class="name">${esc(CONFIG.brand)}</div><div class="url">https://${esc(CONFIG.domain)} › guides</div></div></div>
+      <h3>${esc(s.query.charAt(0).toUpperCase() + s.query.slice(1))} : le guide complet | ${esc(CONFIG.brand)}</h3>
+      <p>Tout ce qu'il faut savoir pour bien choisir, comparer et passer à l'action — expliqué simplement, avec des exemples concrets et un simulateur gratuit.</p>
+    </div>`;
+  let list = "";
+  for (let r = 1; r <= 10; r++) {
+    list += r === s.position ? ours : generic();
+    if (r === 4) list += `<div class="paa"><h4>Autres questions posées</h4>${'<div><div class="bar" style="width:70%"></div></div>'.repeat(4)}</div>`;
+  }
+  const logo = "Google".split("").map((c) => `<span>${c}</span>`).join("");
+  return `<div class="serp">
+    <div class="serp-top"><div class="glogo">${logo}</div><div class="gbox">${esc(s.query)}</div></div>
+    <div class="gtabs"><span>Tous</span><span>Images</span><span>Actualités</span><span>Vidéos</span><span>Shopping</span></div>
+    <div class="results">${list}</div></div>`;
+}
+
+function render(s) {
+  const label = s.tag;
+  if (s.image) {
+    const rings = (s.highlights || []).map((h) =>
+      `<div class="ring${h.height < 4 ? " small" : ""}" data-label="${esc(h.label)}" style="top:${h.top}%;height:${h.height}%;left:${h.left}%;width:${h.width}%;right:auto"></div>`).join("");
+    page.innerHTML = `<img src="${esc(s.image)}" alt="Résultats ${SOURCES[s.source].name} pour « ${esc(s.query)} »">${rings}`;
+  } else {
+    page.innerHTML = fakeSerp(s);
+    const el = page.querySelector("[data-ours]");
+    if (el) {
+      const ring = document.createElement("div");
+      ring.className = "ring"; ring.dataset.label = label;
+      ring.style.top = (el.offsetTop - 8) + "px";
+      ring.style.height = (el.offsetHeight + 16) + "px";
+      ring.style.left = "100px"; ring.style.right = "auto";
+      ring.style.width = Math.min(el.offsetWidth + 40, page.clientWidth - 110) + "px";
+      if (page.clientWidth < 680) { ring.style.left = "12px"; ring.style.width = (page.clientWidth - 24) + "px"; }
+      page.appendChild(ring);
+    }
+  }
+  $("jump").style.display = page.querySelector(".ring") ? "" : "none";
+}
+
+function show(i) {
+  const n = CONFIG.screens.length;
+  current = (i + n) % n;
+  const s = CONFIG.screens[current];
+  [...$("pills").children].forEach((p, k) => {
+    p.setAttribute("aria-selected", k === current);
+    if (k === current) p.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
+  });
+  [...$("dots").children].forEach((d, k) => d.setAttribute("aria-current", k === current));
+  $("idx").textContent = current + 1;
+  $("url").innerHTML = SOURCES[s.source].url(esc(encodeURIComponent(s.query).replace(/%20/g, "+")));
+
+  page.classList.add("out");
+  setTimeout(() => {
+    cancelAnimationFrame(scrolling);
+    render(s);
+    vp.scrollTop = 0;
+    onScroll();
+    page.classList.remove("out");
+    const img = page.querySelector("img");
+    if (img && !img.complete) img.onload = onScroll;
+  }, 220);
+}
+
+function animateTo(target, duration = 1300) {
+  cancelAnimationFrame(scrolling);
+  const start = vp.scrollTop, delta = target - start, t0 = performance.now();
+  const ease = (t) => (t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  return new Promise((done) => {
+    const step = (now) => {
+      const t = Math.min(1, (now - t0) / duration);
+      vp.scrollTop = start + delta * ease(t);
+      if (t < 1) scrolling = requestAnimationFrame(step); else done();
+    };
+    scrolling = requestAnimationFrame(step);
+  });
+}
+
+$("jump").onclick = async () => {
+  hintDismissed = true; onScroll();
+  const ring = page.querySelector(".ring");
+  if (!ring) return;
+  page.querySelectorAll(".ring").forEach((r) => { r.classList.remove("flash"); void r.offsetWidth; r.classList.add("flash"); });
+  const target = Math.max(0, ring.offsetTop - vp.clientHeight * 0.28);
+  await animateTo(Math.min(target, vp.scrollHeight - vp.clientHeight));
+};
+
+function onScroll() {
+  const max = vp.scrollHeight - vp.clientHeight;
+  const p = max > 0 ? vp.scrollTop / max : 0;
+  $("bar").style.width = (p * 100) + "%";
+  $("fade").classList.toggle("hide", p > .98);
+  if (vp.scrollTop > 40) hintDismissed = true;
+  $("hint").classList.toggle("hide", hintDismissed);
+}
+vp.addEventListener("scroll", onScroll, { passive: true });
+
+$("prev").onclick = () => show(current - 1);
+$("next").onclick = () => show(current + 1);
+document.addEventListener("keydown", (e) => {
+  if (e.key === "ArrowRight") show(current + 1);
+  if (e.key === "ArrowLeft") show(current - 1);
+});
+
+show(0);
+</script>
+</body>
+</html>
