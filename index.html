@@ -47,7 +47,7 @@
   body {
     font-family: "Source Sans 3", "Source Sans Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
-    padding: 20px 16px 28px;
+    padding: 12px 16px 20px;
   }
   .wrap { max-width: 980px; margin: 0 auto; }
 
@@ -131,7 +131,7 @@
 
   .stage { position: relative; background: #fff; }
   .viewport {
-    height: clamp(340px, calc(100vh - 300px), 760px);
+    height: clamp(340px, calc(100vh - 210px), 800px);
     overflow-y: auto; overscroll-behavior: contain; scroll-behavior: auto;
   }
   .viewport::-webkit-scrollbar { width: 10px; }
@@ -204,13 +204,6 @@
 </head>
 <body>
 <main class="wrap">
-  <header class="head">
-    <div>
-      <p class="eyebrow" id="eyebrow"></p>
-      <h1 id="title"></h1>
-    </div>
-    <div class="counter"><span id="qname"></span> · screen <b id="idx">1</b> / <b id="total"></b></div>
-  </header>
 
   <nav class="queries" id="queries" role="tablist" aria-label="Requêtes"></nav>
   <nav class="pills" id="pills" role="tablist" aria-label="Supports"></nav>
@@ -268,8 +261,6 @@ const vp = $("vp"), page = $("page");
 let q = 0, current = 0, jumpIdx = 0, hintDismissed = false, scrolling = null;
 const screens = () => QUERIES[q].screens;
 
-$("eyebrow").textContent = CONFIG.eyebrow;
-$("title").textContent = CONFIG.title;
 
 const searchIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>';
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -302,8 +293,6 @@ function selectQuery(k, keepHash) {
     d.onclick = () => show(i);
     $("dots").appendChild(d);
   });
-  $("total").textContent = screens().length;
-  $("qname").textContent = QUERIES[q].label;
   show(0);
 }
 
@@ -324,7 +313,6 @@ function show(i) {
     if (k === current) p.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   });
   [...$("dots").children].forEach((d, k) => d.setAttribute("aria-current", k === current));
-  $("idx").textContent = current + 1;
   $("url").innerHTML = SOURCES[s.source].url(esc(encodeURIComponent(s.query).replace(/%20/g, "+")));
   updateJump();
 
