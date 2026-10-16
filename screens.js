@@ -7,7 +7,7 @@ const QUERIES = [
       {
         "source": "google",
         "query": "meilleure assurance vie",
-        "tag": "IA + #2",
+        "tag": "IA + SEO #2",
         "image": "images/assurance-vie-1-google.png",
         "highlights": [
           {
@@ -25,7 +25,7 @@ const QUERIES = [
             "width": 29.25
           },
           {
-            "label": "#2 organique",
+            "label": "SEO #2",
             "top": 78.29,
             "height": 11.63,
             "left": 11.33,
@@ -51,11 +51,11 @@ const QUERIES = [
       {
         "source": "chatgpt",
         "query": "Quelle est la meilleure assurance vie du moment ?",
-        "tag": "Source citée",
+        "tag": "Lien recommandé",
         "image": "images/assurance-vie-3-chatgpt.png",
         "highlights": [
           {
-            "label": "Source citée",
+            "label": "Lien recommandé",
             "top": 91.46,
             "height": 5.72,
             "left": 15.67,
@@ -66,11 +66,11 @@ const QUERIES = [
       {
         "source": "youtube",
         "query": "meilleure assurance vie",
-        "tag": "#1",
+        "tag": "#1 hors sponso",
         "image": "images/assurance-vie-4-youtube.png",
         "highlights": [
           {
-            "label": "#1 vidéo",
+            "label": "#1 vidéo hors sponso",
             "top": 41.08,
             "height": 28.0,
             "left": 0.33,
@@ -146,7 +146,7 @@ const QUERIES = [
       {
         "source": "chatgpt",
         "query": "Quel est le meilleur per ?",
-        "tag": "Source citée",
+        "tag": "Lien recommandé",
         "image": "images/per-4-chatgpt.png",
         "highlights": [
           {
@@ -167,7 +167,7 @@ const QUERIES = [
       {
         "source": "google",
         "query": "meilleur pea",
-        "tag": "IA + #2",
+        "tag": "IA + SEO #2",
         "image": "images/pea-1-google.png",
         "highlights": [
           {
@@ -178,7 +178,7 @@ const QUERIES = [
             "width": 29.46
           },
           {
-            "label": "#2 organique",
+            "label": "SEO #2",
             "top": 79.24,
             "height": 15.55,
             "left": 11.83,
@@ -226,11 +226,11 @@ const QUERIES = [
       {
         "source": "youtube",
         "query": "meilleur pea",
-        "tag": "#1",
+        "tag": "#1 hors sponso",
         "image": "images/pea-4-youtube.png",
         "highlights": [
           {
-            "label": "#1 vidéo",
+            "label": "#1 vidéo hors sponso",
             "top": 38.89,
             "height": 26.18,
             "left": 0.33,
@@ -314,11 +314,11 @@ const QUERIES = [
       {
         "source": "youtube",
         "query": "yomoni",
-        "tag": "#1",
+        "tag": "#1 hors sponso",
         "image": "images/yomoni-5-youtube.png",
         "highlights": [
           {
-            "label": "#1 vidéo",
+            "label": "#1 vidéo hors sponso",
             "top": 39.12,
             "height": 25.72,
             "left": 0.33,
@@ -335,7 +335,7 @@ const QUERIES = [
       {
         "source": "google",
         "query": "avis bourse direct",
-        "tag": "IA + #2",
+        "tag": "IA + SEO #2",
         "image": "images/bourse-direct-1-google.png",
         "highlights": [
           {
@@ -346,7 +346,7 @@ const QUERIES = [
             "width": 28.83
           },
           {
-            "label": "#2 organique",
+            "label": "SEO #2",
             "top": 75.19,
             "height": 14.46,
             "left": 12.42,
@@ -394,11 +394,11 @@ const QUERIES = [
       {
         "source": "youtube",
         "query": "bourse direct",
-        "tag": "#1",
+        "tag": "#1 hors sponso",
         "image": "images/bourse-direct-4-youtube.png",
         "highlights": [
           {
-            "label": "#1 vidéo",
+            "label": "#1 vidéo hors sponso",
             "top": 10.65,
             "height": 25.82,
             "left": 0.33,

@@ -62,7 +62,7 @@
   .queries { display: grid; grid-template-columns: repeat(auto-fit, minmax(128px, 1fr)); gap: 8px; padding: 2px 2px 14px; }
   .query {
     min-width: 0; text-align: left; cursor: pointer; font: inherit; color: var(--ink);
-    background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 9px 12px 10px;
+    background: var(--bg); border: 1.5px solid var(--line); border-radius: 12px; padding: 11px 12px 12px;
     transition: border-color .2s, background .2s, transform .2s, box-shadow .2s;
   }
   .query:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 45%, var(--line)); }
@@ -154,6 +154,7 @@
     box-shadow: 0 4px 12px -4px rgba(10, 50, 50, .45); border: 1.5px solid var(--accent);
   }
   .ring.small::after { top: -34px; right: 50%; transform: translateX(50%); }
+  .ring.below::after { top: auto; bottom: -34px; right: 50%; transform: translateX(50%); }
   .ring.flash { animation: flash 1.4s ease-out 2; }
   @keyframes flash {
     0% { box-shadow: 0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent); }
@@ -249,7 +250,7 @@ const CONFIG = {
 const SOURCES = {
   "google":      { name: "Google",            url: (q) => `<b>google.fr</b>/search?q=${q}` },
   "google-news": { name: "Google Actualités", url: (q) => `<b>google.fr</b>/search?q=${q}&tbm=nws` },
-  "google-ai":   { name: "Google Mode IA",    url: (q) => `<b>google.fr</b>/search?udm=50&q=${q}` },
+  "google-ai":   { name: "Gemini",            url: () => `<b>gemini.google.com</b>` },
   "youtube":     { name: "YouTube",           url: (q) => `<b>youtube.com</b>/results?search_query=${q}` },
   "chatgpt":     { name: "ChatGPT",           url: () => `<b>chatgpt.com</b>` },
   "claude":      { name: "Claude",            url: () => `<b>claude.ai</b>` },
@@ -268,7 +269,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 QUERIES.forEach((query, k) => {
   const b = document.createElement("button");
   b.className = "query"; b.setAttribute("role", "tab");
-  b.innerHTML = `<small>${query.screens.length} supports</small><b>${esc(query.label)}</b>`;
+  b.innerHTML = `<b>${esc(query.label)}</b>`;
   b.onclick = () => selectQuery(k);
   $("queries").appendChild(b);
   query.screens.forEach((s) => { const im = new Image(); im.src = s.image; }); // préchargement
@@ -298,7 +299,7 @@ function selectQuery(k, keepHash) {
 
 function render(s) {
   const rings = s.highlights.map((h) =>
-    `<div class="ring${h.height < 4 ? " small" : ""}" data-label="${esc(h.label)}" style="top:${h.top}%;height:${h.height}%;left:${h.left}%;width:${h.width}%;right:auto"></div>`).join("");
+    `<div class="ring${h.top + h.height > 85 ? " below" : h.height < 7 ? " small" : ""}" data-label="${esc(h.label)}" style="top:${h.top}%;height:${h.height}%;left:${h.left}%;width:${h.width}%;right:auto"></div>`).join("");
   page.innerHTML = `<img src="${esc(s.image)}" alt="Résultats ${SOURCES[s.source].name} pour « ${esc(s.query)} »">${rings}`;
   $("jump").style.display = s.highlights.length ? "" : "none";
 }
